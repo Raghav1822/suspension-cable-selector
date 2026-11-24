@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f3ed">
+    <meta name="description" content="A preliminary engineering tool for comparing suspension bridge cable wire grades by capacity, weight, durability, cost and estimated carbon.">
+    <title>Spanwise — Cable material selector</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M4 29c8-20 24-20 32 0M4 29h32M12 29V17m16 12V17' fill='none' stroke='%231f4d43' stroke-width='2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Spanwise home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M4 29C11 9 29 9 36 29M4 29h32M12 29V17m16 12V17" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+        </span>
+        <span>SPANWISE<span class="brand-sub">ENGINEERING TOOLS</span></span>
+      </a>
+      <a class="top-link" href="#method">Method &amp; limits <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> PRELIMINARY MATERIAL STUDY <span>01 / 04</span></div>
+        <div class="intro-grid">
+          <div>
+            <h1>Choosing the<br><em>right wire</em> for the span.</h1>
+            <p class="intro-copy">A first-pass comparison of galvanized bridge-wire grades, balancing strength and service life against cable weight, cost and carbon.</p>
+          </div>
+          <div class="bridge-drawing" aria-label="Illustration of a suspension bridge">
+            <svg viewBox="0 0 470 150" role="img" aria-hidden="true">
+              <path class="bridge-cable" d="M16 99C98 99 100 37 235 37s137 62 219 62" />
+              <path class="bridge-deck" d="M12 101h446" />
+              <path class="bridge-tower" d="M88 101V35m-12 0h24m-12 0v66m282 0V35m-12 0h24m-12 0v66" />
+              <path class="bridge-hanger" d="M36 88v13m34-19v19m36-24v24m38-28v28m38-30v30m38-30v30m38-30v30m38-28v28m38-24v24m36-19v19m34-13v13" />
+              <circle cx="88" cy="35" r="3" /><circle cx="382" cy="35" r="3" />
+            </svg>
+            <span>MAIN CABLE · SUSPENSION BRIDGE</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Cable material comparison">
+        <aside class="basis-panel">
+          <div class="panel-heading">
+            <div class="eyebrow">01 — PROJECT BASIS</div>
+            <h2>Set the<br>design brief.</h2>
+          </div>
+          <form id="basis-form">
+            <label for="load">Design tensile force <span>per cable</span></label>
+            <div class="input-wrap"><input id="load" name="load" type="number" min="0.1" max="5000" step="1" value="250" required><span>MN</span></div>
+            <label for="length">Effective cable length</label>
+            <div class="input-wrap"><input id="length" name="length" type="number" min="1" max="100000" step="10" value="1800" required><span>m</span></div>
+            <label for="factor">Screening safety factor</label>
+            <div class="input-wrap"><input id="factor" name="factor" type="number" min="1" max="10" step="0.1" value="2.5" required><span>×</span></div>
+            <p class="field-note">Applied to ultimate tensile strength for this preliminary comparison.</p>
+            <button class="reset-button" type="reset">↺ <span>Reset project basis</span></button>
+          </form>
+          <div class="basis-foot"><span class="status-dot"></span> Results update as you type</div>
+        </aside>
+
+        <div class="results">
+          <div class="results-heading">
+            <div>
+              <div class="eyebrow">02 — MATERIAL SHORTLIST</div>
+              <h2>Compare the candidates<span class="period">.</span></h2>
+            </div>
+            <div class="rank-note"><span class="rank-icon">↗</span> Balanced score <b>· equal criteria</b></div>
+          </div>
+
+          <div class="winner-card" id="winner-card" aria-live="polite">
+            <div class="winner-label"><span class="winner-star">✳</span> CURRENT FRONT-RUNNER</div>
+            <div class="winner-content">
+              <div><h3 id="winner-name">—</h3><p id="winner-caption">—</p></div>
+              <div class="winner-score"><strong id="winner-score">—</strong><span> / 100<br>overall fit</span></div>
+            </div>
+            <div class="winner-stats">
+              <div><span>REQUIRED AREA</span><strong id="winner-area">—</strong></div>
+              <div><span>EST. CABLE MASS</span><strong id="winner-mass">—</strong></div>
+              <div><span>EST. MATERIAL COST</span><strong id="winner-cost">—</strong></div>
+            </div>
+          </div>
+
+          <div class="comparison-card">
+            <div class="comparison-title">
+              <div><span class="section-number">A</span><h3>Ranked material comparison</h3></div>
+              <span class="unit-hint">CALCULATED FOR YOUR PROJECT BASIS</span>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">RANK / WIRE GRADE</th>
+                    <th scope="col">UTS <small>MPa</small></th>
+                    <th scope="col">PROOF <small>MPa</small></th>
+                    <th scope="col">SPECIFIC STRENGTH <small>kN·m/kg</small></th>
+                    <th scope="col">AREA <small>m²</small></th>
+                    <th scope="col">MASS <small>t</small></th>
+                    <th scope="col">ELONGATION <small>m</small></th>
+                    <th scope="col">COST <small>USD</small></th>
+                    <th scope="col">CARBON <small>t CO₂e</small></th>
+                    <th scope="col">FIT <small>/ 100</small></th>
+                  </tr>
+                </thead>
+                <tbody id="results-body"></tbody>
+              </table>
+            </div>
+            <div class="table-foot"><span class="info-mark">i</span> Fit score weights eight criteria equally; higher is better. Cost and carbon are estimated screening values.</div>
+          </div>
+
+          <div class="criteria-strip">
+            <div class="criteria-title"><span class="section-number">B</span><h3>What goes into the ranking</h3></div>
+            <div class="criteria-list">
+              <span>Ultimate strength</span><i></i><span>Proof strength</span><i></i><span>Specific strength</span><i></i><span>Elastic modulus</span><i></i><span>Fatigue</span><i></i><span>Corrosion</span><i></i><span>Cost</span><i></i><span>Embodied carbon</span>
+            </div>
+            <p>For fatigue and corrosion, each grade uses a relative 1–5 screening rating. The ratings are indicative assumptions, not test results.</p>
+          </div>
+
+          <div class="equations" id="method">
+            <div class="equations-heading"><div class="eyebrow">03 — CALCULATION METHOD</div><h2>From load to<br><em>lifecycle trade-offs.</em></h2></div>
+            <div class="equation-list">
+              <div><span>Allowable stress</span><code>σ<sub>allow</sub> = UTS / N</code></div>
+              <div><span>Required metallic area</span><code>A = F / σ<sub>allow</sub></code></div>
+              <div><span>Cable mass</span><code>m = ρ A L</code></div>
+              <div><span>Elastic elongation</span><code>δ = F L / A E</code></div>
+              <div><span>Material cost · carbon</span><code>C = m C<sub>kg</sub> &nbsp; · &nbsp; CO₂ = m EF</code></div>
+              <div><span>Specific strength</span><code>UTS / ρ</code></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="notes">
+      <div class="footer-brand">SPANWISE <span>ENGINEERING TOOLS</span></div>
+      <p>Preliminary screening only. Not a substitute for project-specific design, code checks, fatigue testing, corrosion assessment, procurement quotes, or a life-cycle assessment. Verify all properties with wire manufacturers and qualified bridge engineers.</p>
+      <a class="matlab-link" href="cable_material_selector.m" download>↓ <span>Download MATLAB script</span></a>
+      <span class="footer-index">MATERIAL STUDY / 01</span>
+    </footer>
+    <noscript><p class="noscript">This calculator needs JavaScript enabled to update the material comparison.</p></noscript>
+  </body>
+</html>
